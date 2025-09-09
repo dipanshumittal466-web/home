@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL;  // 👈 env se backend URL
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: localStorage.getItem("token") || null,
@@ -9,7 +11,7 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     async login(email, password) {
-      const { data } = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const { data } = await axios.post(`${API}/auth/login`, { email, password });
       this.token = data.token;
       this.role = data.role;
       this.user = data.user;
@@ -17,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
       localStorage.setItem("role", data.role);
     },
     async register(payload) {
-      const { data } = await axios.post("http://localhost:5000/api/auth/register", payload);
+      const { data } = await axios.post(`${API}/auth/register`, payload);
       this.token = data.token;
       this.role = data.role;
       this.user = data.user;
