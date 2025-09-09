@@ -1,0 +1,8 @@
+HomeServicesEtc.com – File Descriptions
+
+1. HomeServicesEtc_Addendum.docx / .pdf – Full Addendum (legal use)
+2. HomeServicesEtc_Short_Addendum.docx / .pdf – Short version (website copy)
+3. HomeServicesEtc_Popup.html – Developer pop-up notice
+4. HomeServicesEtc_Developer_Checklist.docx / .pdf – Developer guide
+5. HomeServicesEtc_SummarySheet.pdf – Overview sheet
+6. HomeServicesEtc_File_Descriptions.txt – This list
