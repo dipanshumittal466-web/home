@@ -202,3 +202,12 @@ app.post('/api/subscribe', async (req,res)=>{
 
 const port = process.env.PORT || 8080;
 app.listen(port, ()=> console.log(`API listening on :${port}`));
+app.get("/", (req, res) => {
+  res.send("✅ Backend is running. Use /api endpoints.");
+});
+
+// Example health check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Backend running successfully" });
+});
+
