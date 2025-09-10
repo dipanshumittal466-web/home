@@ -1,14 +1,21 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import App from "./App.vue";
-import router from "./router";
+const app = document.getElementById('app');
 
-// 🔹 API URL test log 
-console.log("API URL:", import.meta.env.VITE_API_URL);
+async function load() {
+  try {
+    // ✅ Base URL set (environment ke according)
+    const baseURL = import.meta.env.VITE_API_URL || "";  
+    // Example: VITE_API_URL = "https://yourdomain.com/api"
 
-const app = createApp(App);
+    const cats = await fetch(`${baseURL}/api/categories`).then(r => r.json());
 
-app.use(createPinia());
-app.use(router);
+    let totalSubs = cats.reduce((acc, c) => acc + (c.children ? c.children.length : 0), 0);
 
-app.mount("#app");
+    app.innerHTML = `<h1>HomeServicesEtc</h1>
+      <p><b>11</b> main categories (icons) + <b>${totalSubs}</b> subcategories = <b>${11 + totalSubs}</b> total.</p>
+      <ul>` + cats.map(c => `<li>${c.name}</li>`).join('') + `</ul>`;
+  } catch (err) {
+    app.innerHTML = `<p style="color:red">❌ Error loading categories: ${err.message}</p>`;
+  }
+}
+
+load();
