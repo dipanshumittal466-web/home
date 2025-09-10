@@ -82,17 +82,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Sidebar from "../components/Sidebar.vue";
-import axios from "axios";
+// 👇 axios instance with baseURL
+import axios from "../utils/axios";
 
 const pendingProviders = ref([]);
 const jobs = ref([]);
-const token = localStorage.getItem("token");
 
 const fetchProviders = async () => {
   try {
-    const { data } = await axios.get("http://localhost:5000/api/admin/providers/pending", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const { data } = await axios.get("/admin/providers/pending");
     pendingProviders.value = data;
   } catch (err) {
     alert("❌ Error fetching providers: " + err.message);
@@ -101,11 +99,7 @@ const fetchProviders = async () => {
 
 const verifyProvider = async (id, approve) => {
   try {
-    await axios.post(
-      `http://localhost:5000/api/admin/providers/${id}/verify`,
-      { approve },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    await axios.post(`/admin/providers/${id}/verify`, { approve });
     alert("✅ Provider updated");
     fetchProviders();
   } catch (err) {
@@ -115,9 +109,7 @@ const verifyProvider = async (id, approve) => {
 
 const fetchJobs = async () => {
   try {
-    const { data } = await axios.get("http://localhost:5000/api/admin/jobs", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const { data } = await axios.get("/admin/jobs");
     jobs.value = data;
   } catch (err) {
     alert("❌ Error fetching jobs: " + err.message);
@@ -126,9 +118,7 @@ const fetchJobs = async () => {
 
 const removeJob = async (id) => {
   try {
-    await axios.delete(`http://localhost:5000/api/admin/jobs/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await axios.delete(`/admin/jobs/${id}`);
     alert("🗑 Job removed");
     fetchJobs();
   } catch (err) {
