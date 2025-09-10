@@ -2,7 +2,7 @@
   <div class="p-6">
     <h1 class="text-2xl font-bold mb-4">Welcome to HomeServicesEtc</h1>
     <p class="mb-6 text-gray-600">
-      Find and book trusted service providers in 311 categories.
+      Find and book trusted service providers in 11 categories.
     </p>
 
     <h2 class="text-xl font-semibold mb-3">Main Categories</h2>
