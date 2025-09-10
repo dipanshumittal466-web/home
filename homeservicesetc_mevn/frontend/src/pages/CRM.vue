@@ -28,6 +28,10 @@
           <li>Rejected: {{ analytics.providers.rejected }}</li>
         </ul>
       </div>
+
+      <!-- Error / Loading -->
+      <div v-if="loading" class="mt-6 text-blue-600">Loading data...</div>
+      <div v-if="error" class="mt-6 text-red-600">⚠️ {{ error }}</div>
     </div>
   </div>
 </template>
@@ -103,11 +107,22 @@ const analytics = ref({
   providers: { total: 0, approved: 0, pending: 0, rejected: 0 }
 });
 
+const loading = ref(true);
+const error = ref(null);
+
 onMounted(async () => {
-  const token = localStorage.getItem("token");
-  const { data } = await axios.get("http://localhost:5000/api/crm/analytics", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  analytics.value = data;
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/crm/analytics`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    analytics.value = data;
+  } catch (err) {
+    console.error("CRM fetch failed", err);
+    error.value = "Failed to load analytics data.";
+  } finally {
+    loading.value = false;
+  }
 });
 </script>
