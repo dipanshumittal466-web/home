@@ -40,12 +40,11 @@
    <p class="mt-4 text-center text-sm">
   <span v-if="isRegister">
     Already have an account?
-    <a @click="isRegister = false">Login</a>
+    <a @click="isRegister = false" class="text-blue-600 cursor-pointer">Login</a>
   </span>
-
   <span v-else>
-    Don't have an account?
-    <a @click="isRegister = true">Register</a>
+    Don’t have an account?
+    <a @click="isRegister = true" class="text-blue-600 cursor-pointer">Register</a>
   </span>
 </p>
   </div>
@@ -73,4 +72,5 @@ const submit = async () => {
       window.location.href = "/";
     } else {
       await auth.login(form.e
+
 
