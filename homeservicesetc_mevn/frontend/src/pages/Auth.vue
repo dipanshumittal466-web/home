@@ -27,7 +27,12 @@
 
     <div v-if="isRegister" class="mb-4 flex items-center">
       <input v-model="form.acceptedIndemnity" type="checkbox" class="mr-2" />
-      <span>I accept the <a href="/legal/indemnity.html" target="_blank" class="text-blue-600">indemnity agreement</a></span>
+      <span>
+        I accept the
+        <a href="/legal/indemnity.html" target="_blank" class="text-blue-600">
+          indemnity agreement
+        </a>
+      </span>
     </div>
 
     <button
@@ -37,16 +42,16 @@
       {{ isRegister ? "Register" : "Login" }}
     </button>
 
-   <p class="mt-4 text-center text-sm">
-  <span v-if="isRegister">
-    Already have an account?
-    <a @click="isRegister = false" class="text-blue-600 cursor-pointer">Login</a>
-  </span>
-  <span v-else>
-    Don’t have an account?
-    <a @click="isRegister = true" class="text-blue-600 cursor-pointer">Register</a>
-  </span>
-</p>
+    <p class="mt-4 text-center text-sm">
+      <span v-if="isRegister">
+        Already have an account?
+        <a @click="isRegister = false" class="text-blue-600 cursor-pointer">Login</a>
+      </span>
+      <span v-else>
+        Don’t have an account?
+        <a @click="isRegister = true" class="text-blue-600 cursor-pointer">Register</a>
+      </span>
+    </p>
   </div>
 </template>
 
@@ -62,7 +67,7 @@ const form = reactive({
   email: "",
   password: "",
   role: "poster",
-  acceptedIndemnity: false
+  acceptedIndemnity: false,
 });
 
 const submit = async () => {
@@ -71,6 +76,14 @@ const submit = async () => {
       await auth.register(form);
       window.location.href = "/";
     } else {
-      await auth.login(form.e
-
-
+      await auth.login({
+        email: form.email,
+        password: form.password,
+      });
+      window.location.href = "/";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+</script>
