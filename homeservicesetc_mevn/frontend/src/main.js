@@ -1,5 +1,15 @@
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+
 const app = document.getElementById('app');
 
+// ✅ Vue app mount करो (yeh hona hi chahiye frontend me)
+const vueApp = createApp(App);
+vueApp.use(router);
+vueApp.mount("#app");
+
+// 🔹 Aapka existing async function bhi rakha hai (bina delete kiye)
 async function load() {
   try {
     // ✅ Render ke liye: VITE_API_URL ko env me set karo (example: https://yourapp.onrender.com)
@@ -16,11 +26,16 @@ async function load() {
       0
     );
 
-    app.innerHTML = `<h1>HomeServicesEtc</h1>
-      <p><b>11</b> main categories (icons) + <b>${totalSubs}</b> subcategories = <b>${11 + totalSubs}</b> total.</p>
-      <ul>` + cats.map(c => `<li>${c.name}</li>`).join('') + `</ul>`;
+    // ⚠️ Vue mount ke baad ye overwrite karega, isliye optional hi use karna
+    if (app) {
+      app.innerHTML = `<h1>HomeServicesEtc</h1>
+        <p><b>11</b> main categories (icons) + <b>${totalSubs}</b> subcategories = <b>${11 + totalSubs}</b> total.</p>
+        <ul>` + cats.map(c => `<li>${c.name}</li>`).join('') + `</ul>`;
+    }
   } catch (err) {
-    app.innerHTML = `<p style="color:red">❌ Error loading categories: ${err.message}</p>`;
+    if (app) {
+      app.innerHTML = `<p style="color:red">❌ Error loading categories: ${err.message}</p>`;
+    }
   }
 }
 
