@@ -8,9 +8,11 @@ export let mongoose = null;
 
 export const connectDB = async () => {
   const type = (process.env.DB_TYPE || 'mongo').toLowerCase();
+
   if (type === 'sql') {
     const { Sequelize } = await import('sequelize');
     const dialect = process.env.SQL_DIALECT || 'mysql';
+
     sequelize = new Sequelize(
       process.env.SQL_DB || 'homeservicesetc',
       process.env.SQL_USER || 'root',
@@ -22,25 +24,28 @@ export const connectDB = async () => {
         logging: false
       }
     );
+
     try {
       await sequelize.authenticate();
-      console.log('✅ SQL connected:', dialect);
+      console.log(`✅ SQL connected successfully (${dialect})`);
+      orm = 'sql';
     } catch (err) {
       console.error('❌ SQL connection failed:', err.message);
-      process.exit(1);
+      throw new Error(`SQL connection failed: ${err.message}`);
     }
-    orm = 'sql';
   } else {
     const _mongoose = await import('mongoose');
     mongoose = _mongoose.default;
+
     try {
       await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/homeservicesetc');
-      console.log('✅ MongoDB connected');
+      console.log('✅ MongoDB connected successfully');
+      orm = 'mongo';
     } catch (err) {
-      console.error('❌ Mongo connection failed:', err.message);
-      process.exit(1);
+      console.error('❌ MongoDB connection failed:', err.message);
+      throw new Error(`MongoDB connection failed: ${err.message}`);
     }
-    orm = 'mongo';
   }
+
   return orm;
 };
