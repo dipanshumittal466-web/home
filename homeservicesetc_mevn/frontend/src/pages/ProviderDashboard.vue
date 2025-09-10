@@ -49,7 +49,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Sidebar from "../components/Sidebar.vue";
-import axios from "axios";
+import axios from "../utils/axios";   // ✅ custom axios instance use करेंगे
 
 const provider = ref(null);
 const jobs = ref([]);
@@ -69,7 +69,7 @@ const uploadDocs = async () => {
     if (files.value.idDoc) formData.append("idDoc", files.value.idDoc);
     if (insuranceExpiry.value) formData.append("insuranceExpiry", insuranceExpiry.value);
 
-    const { data } = await axios.post("http://localhost:5000/api/providers/upload", formData, {
+    const { data } = await axios.post("/providers/upload", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data"
@@ -84,8 +84,12 @@ const uploadDocs = async () => {
 };
 
 const fetchJobs = async () => {
-  const { data } = await axios.get("http://localhost:5000/api/jobs");
-  jobs.value = data;
+  try {
+    const { data } = await axios.get("/jobs");   // ✅ localhost हटाया
+    jobs.value = data;
+  } catch (err) {
+    alert("❌ Error fetching jobs: " + err.message);
+  }
 };
 
 onMounted(fetchJobs);
