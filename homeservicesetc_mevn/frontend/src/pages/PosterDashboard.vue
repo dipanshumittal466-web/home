@@ -39,7 +39,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Sidebar from "../components/Sidebar.vue";
-import axios from "axios";
+import axios from "../utils/axios";   // ✅ custom axios instance
 
 const job = ref({ title: "", description: "" });
 const jobs = ref([]);
@@ -47,7 +47,7 @@ const jobs = ref([]);
 const postJob = async () => {
   try {
     const token = localStorage.getItem("token");
-    await axios.post("http://localhost:5000/api/jobs", job.value, {
+    await axios.post("/jobs", job.value, {
       headers: { Authorization: `Bearer ${token}` }
     });
     alert("✅ Job posted!");
@@ -59,11 +59,15 @@ const postJob = async () => {
 };
 
 const fetchJobs = async () => {
-  const token = localStorage.getItem("token");
-  const { data } = await axios.get("http://localhost:5000/api/jobs/mine", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  jobs.value = data;
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios.get("/jobs/mine", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    jobs.value = data;
+  } catch (err) {
+    alert("❌ Error fetching jobs: " + err.message);
+  }
 };
 
 onMounted(fetchJobs);
